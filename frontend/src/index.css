@@ -1,3 +1,101 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  background-color: #e9dcb8;
+  background-image: var(--paper-grain),
+    radial-gradient(ellipse at top left, #f4ead0 0%, #e4d6ab 60%, #dccb9c 100%);
+  background-attachment: fixed;
+}
+
+.font-hand {
+  font-family: "Patrick Hand", cursive;
+}
+
+/* torn/deckled top edge for note cards, drawn as a jagged mask */
+.torn-edge::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: inherit;
+  clip-path: polygon(
+    0% 100%,
+    4% 20%,
+    9% 100%,
+    14% 30%,
+    19% 100%,
+    24% 15%,
+    29% 100%,
+    34% 25%,
+    39% 100%,
+    44% 10%,
+    49% 100%,
+    54% 30%,
+    59% 100%,
+    64% 15%,
+    69% 100%,
+    74% 25%,
+    79% 100%,
+    84% 20%,
+    89% 100%,
+    94% 30%,
+    100% 100%
+  );
+}
+
+/* folded corner on note cards */
+.folded-corner {
+  position: relative;
+}
+.folded-corner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, transparent 50%, rgba(43, 33, 26, 0.18) 50%);
+  border-bottom-left-radius: 3px;
+}
+
+.pushpin {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 30%, #e2564a, #8c2f20 70%);
+  box-shadow: 0 2px 3px rgba(43, 33, 26, 0.5);
+}
+
+/* ruled notebook page: horizontal lines + red margin, used on write/edit pages */
+.ruled-page {
+  background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 31px,
+      #b7a37c 32px
+    ),
+    linear-gradient(to right, transparent 64px, #c1584a55 65px, transparent 66px);
+  background-size: 100% 32px, 100% 100%;
+  background-repeat: repeat-y, no-repeat;
+}
+
+.ruled-page textarea,
+.ruled-page input[type="text"] {
+  line-height: 32px;
+  background: transparent;
+}
