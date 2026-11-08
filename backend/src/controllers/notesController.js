@@ -23,8 +23,19 @@ export async function getNoteById(req, res) {
 
 export async function createNote(req, res) {
   try {
-    const { title, content } = req.body;
-    const note = new Note({ title, content });
+    const { title, content } = req.body ?? {};
+
+    const missing = [];
+    if (typeof title !== "string" || !title.trim()) missing.push("title");
+    if (typeof content !== "string" || !content.trim()) missing.push("content");
+    if (missing.length > 0) {
+      return res.status(400).json({
+        message: "Title and content are required",
+        missing,
+      });
+    }
+
+    const note = new Note({ title: title.trim(), content: content.trim() });
 
     const savedNote = await note.save();
     res.status(201).json(savedNote);
