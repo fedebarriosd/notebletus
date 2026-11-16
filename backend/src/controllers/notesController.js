@@ -1,5 +1,11 @@
 import Note from "../models/Note.js";
 
+const OBJECT_ID_REGEX = /^[0-9a-fA-F]{24}$/;
+
+function invalidId(res) {
+  return res.status(400).json({ message: "Invalid note id" });
+}
+
 export async function getAllNotes(_, res) {
   try {
     const notes = await Note.find().sort({ createdAt: -1 }); // -1 will sort in desc. order (newest first)
@@ -12,6 +18,7 @@ export async function getAllNotes(_, res) {
 
 export async function getNoteById(req, res) {
   try {
+    if (!OBJECT_ID_REGEX.test(req.params.id)) return invalidId(res);
     const note = await Note.findById(req.params.id);
     if (!note) return res.status(404).json({ message: "Note not found!" });
     res.json(note);
@@ -47,6 +54,7 @@ export async function createNote(req, res) {
 
 export async function updateNote(req, res) {
   try {
+    if (!OBJECT_ID_REGEX.test(req.params.id)) return invalidId(res);
     const { title, content } = req.body;
     const updatedNote = await Note.findByIdAndUpdate(
       req.params.id,
@@ -67,6 +75,7 @@ export async function updateNote(req, res) {
 
 export async function deleteNote(req, res) {
   try {
+    if (!OBJECT_ID_REGEX.test(req.params.id)) return invalidId(res);
     const deletedNote = await Note.findByIdAndDelete(req.params.id);
     if (!deletedNote) return res.status(404).json({ message: "Note not found" });
     res.status(200).json({ message: "Note deleted successfully!" });

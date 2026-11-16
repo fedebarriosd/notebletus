@@ -1,0 +1,19 @@
+# Render Blueprint: un único servicio web (backend Express + frontend React compilado).
+# Los valores con sync: false se piden en el panel de Render al crear el servicio (no van en el repositorio).
+services:
+  - type: web
+    name: notebletus
+    runtime: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/notes
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
